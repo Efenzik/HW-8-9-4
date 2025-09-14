@@ -160,11 +160,11 @@
       });
     }
   }
-})({"aGsjB":[function(require,module,exports,__globalThis) {
+})({"3OHon":[function(require,module,exports,__globalThis) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
-var HMR_SERVER_PORT = 52428;
+var HMR_SERVER_PORT = 1234;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "439701173a9199ea";
 var HMR_USE_SSE = false;
@@ -672,47 +672,40 @@ var _task2 = require("./tasks/task-2");
 console.log("123");
 
 },{"./tasks/task-1":"3qDfp","./tasks/task-2":"4misn"}],"3qDfp":[function(require,module,exports,__globalThis) {
-const bookmarkInput = document.querySelector("#bookmarkInput");
-const addBookmarkBtn = document.querySelector("#addBookmarkBtn");
-const bookmarkList = document.querySelector("#bookmarkList");
-const handleAddingBookmark = ()=>{
-    const inputValue = bookmarkInput.value.trim();
-    if (inputValue === "") return;
-    const newItem = document.createElement("li");
-    const newLink = document.createElement("a");
-    newLink.href = inputValue;
-    newLink.textContent = inputValue;
-    const newBtn = document.createElement("button");
-    newBtn.textContent = "DELETE!!!";
-    newBtn.classList.add("delete");
-    const handleRemove = (event)=>{
-        newItem.remove();
-        const bookmarkData = load("bookmarkData");
-        save("bookmarkData", bookmarkData);
-    };
-    newBtn.addEventListener("click", handleRemove);
-    newItem.appendChild(newLink);
-    newItem.appendChild(newBtn);
-    bookmarkList.append(newItem);
-};
-addBookmarkBtn.addEventListener("click", handleAddingBookmark);
-
-},{}],"4misn":[function(require,module,exports,__globalThis) {
 var _storage = require("../storage/storage");
-const formData = document.querySelector(".form");
-const userInfo = (0, _storage.load)("userSettings");
-if (userInfo) {
-    formData.username.value = userInfo.username;
-    formData.password.value = userInfo.password;
-}
-const handleSaveData = (event)=>{
-    const userInfo = {
-        username: event.currentTarget.username.value,
-        password: event.currentTarget.password.value
+const urlInput = document.querySelector("#bookmarkInput");
+const addUrlBtn = document.querySelector("#addBookmarkBtn");
+const urlsList = document.querySelector("#bookmarkList");
+let sitesUrls = (0, _storage.load)("bookmarkData") || [];
+const createUrl = (event)=>{
+    const listItem = document.createElement("li");
+    const link = document.createElement("a");
+    link.href = event;
+    link.textContent = event;
+    link.target = "_blank";
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "DELETE!!!";
+    deleteBtn.classList.add("delete");
+    const removeUrl = ()=>{
+        listItem.remove();
+        sitesUrls = sitesUrls.filter((i)=>i !== event);
+        (0, _storage.save)("bookmarkData", sitesUrls);
     };
-    (0, _storage.save)("userSettings", userInfo);
+    deleteBtn.addEventListener("click", removeUrl);
+    listItem.appendChild(link);
+    listItem.appendChild(deleteBtn);
+    urlsList.appendChild(listItem);
 };
-formData.addEventListener("submit", handleSaveData);
+sitesUrls.forEach((event)=>createUrl(event));
+const addUrl = ()=>{
+    const url = urlInput.value.trim();
+    if (url === "") return;
+    sitesUrls.push(url);
+    (0, _storage.save)("bookmarkData", sitesUrls);
+    createUrl(url);
+    urlInput.value = "";
+};
+addUrlBtn.addEventListener("click", addUrl);
 
 },{"../storage/storage":"cKslY"}],"cKslY":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
@@ -783,6 +776,24 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}]},["aGsjB","2xGku"], "2xGku", "parcelRequireaf7c", {})
+},{}],"4misn":[function(require,module,exports,__globalThis) {
+var _storage = require("../storage/storage");
+const formData = document.querySelector(".form");
+const userInfo = (0, _storage.load)("userSettings");
+if (userInfo) {
+    formData.username.value = userInfo.username;
+    formData.password.value = userInfo.password;
+}
+const handleSaveData = (event)=>{
+    event.preventDefault(); // отменяем перезагрузку страницы
+    const userInfo = {
+        username: event.currentTarget.username.value,
+        password: event.currentTarget.password.value
+    };
+    (0, _storage.save)("userSettings", userInfo);
+};
+formData.addEventListener("submit", handleSaveData);
+
+},{"../storage/storage":"cKslY"}]},["3OHon","2xGku"], "2xGku", "parcelRequireaf7c", {})
 
 //# sourceMappingURL=HW4-8.9.380419b9.js.map

@@ -1,26 +1,45 @@
-const bookmarkInput = document.querySelector("#bookmarkInput");
-const addBookmarkBtn = document.querySelector("#addBookmarkBtn");
-const bookmarkList = document.querySelector("#bookmarkList");
+import { save, load } from "../storage/storage";
 
-const handleAddingBookmark = () => {
-  const inputValue = bookmarkInput.value.trim();
-  if (inputValue === "") return;
-  const newItem = document.createElement("li");
-  const newLink = document.createElement("a");
-  newLink.href = inputValue;
-  newLink.textContent = inputValue;
-  const newBtn = document.createElement("button");
-  newBtn.textContent = "DELETE!!!";
-  newBtn.classList.add("delete");
-  const handleRemove = (event) => {
-    newItem.remove();
+const urlInput = document.querySelector("#bookmarkInput");
+const addUrlBtn = document.querySelector("#addBookmarkBtn");
+const urlsList = document.querySelector("#bookmarkList");
 
-    const bookmarkData = load("bookmarkData");
-    save("bookmarkData", bookmarkData);
+let sitesUrls = load("bookmarkData") || [];
+
+const createUrl = (event) => {
+  const listItem = document.createElement("li");
+
+  const link = document.createElement("a");
+  link.href = event;
+  link.textContent = event;
+  link.target = "_blank";
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "DELETE!!!";
+  deleteBtn.classList.add("delete");
+
+  const removeUrl = () => {
+    listItem.remove();
+    sitesUrls = sitesUrls.filter((i) => i !== event);
+    save("bookmarkData", sitesUrls);
   };
-  newBtn.addEventListener("click", handleRemove);
-  newItem.appendChild(newLink);
-  newItem.appendChild(newBtn);
-  bookmarkList.append(newItem);
+
+  deleteBtn.addEventListener("click", removeUrl);
+
+  listItem.appendChild(link);
+  listItem.appendChild(deleteBtn);
+  urlsList.appendChild(listItem);
 };
-addBookmarkBtn.addEventListener("click", handleAddingBookmark);
+
+sitesUrls.forEach((event) => createUrl(event));
+
+const addUrl = () => {
+  const url = urlInput.value.trim();
+  if (url === "") return;
+  sitesUrls.push(url);
+  save("bookmarkData", sitesUrls);
+  createUrl(url);
+  urlInput.value = "";
+};
+
+addUrlBtn.addEventListener("click", addUrl);

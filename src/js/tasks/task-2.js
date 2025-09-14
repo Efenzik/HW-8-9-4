@@ -6,6 +6,7 @@ if (userInfo) {
   formData.password.value = userInfo.password;
 }
 const handleSaveData = (event) => {
+  event.preventDefault();
   const userInfo = {
     username: event.currentTarget.username.value,
     password: event.currentTarget.password.value,
