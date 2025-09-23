@@ -1,4 +1,4 @@
-import { save, load } from "../storage/storage";
+import { save, load } from "../storage/storage.js";
 const formData = document.querySelector(".form");
 const userInfo = load("userSettings");
 if (userInfo) {

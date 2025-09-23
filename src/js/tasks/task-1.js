@@ -1,4 +1,4 @@
-import { save, load } from "../storage/storage";
+import { save, load } from "../storage/storage.js";
 
 const urlInput = document.querySelector("#bookmarkInput");
 const addUrlBtn = document.querySelector("#addBookmarkBtn");
